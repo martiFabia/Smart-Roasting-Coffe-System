@@ -1,8 +1,6 @@
 /*
 In questo file definisco l'attuatore "ventilazione" come risorsa e l'handler per la gestione delle richieste 
 di azione.
-
-
 */
 
 #include <stdio.h>
