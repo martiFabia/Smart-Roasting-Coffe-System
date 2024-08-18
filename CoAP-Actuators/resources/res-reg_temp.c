@@ -65,7 +65,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
                 reg_temp_status--;
             }else if(reg_temp_status == 0){ //era spenta
                 leds_on(LEDS_GREEN);	
-                light_status++;
+                reg_temp_status++;
             }else{
                 LOG_INFO("Already down");
             }
