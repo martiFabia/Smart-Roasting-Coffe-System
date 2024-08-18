@@ -11,7 +11,7 @@ di azione.
 #include "contiki.h"
 #include "coap-engine.h"
 #include "os/dev/leds.h"
-#include "json_util.h"
+#include "json_util/json.util.h"  //HO QUALCHE DUBBIO
 
 /* Log configuration */
 #include "sys/log.h"
