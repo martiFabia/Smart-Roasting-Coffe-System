@@ -5,12 +5,12 @@
 #include "contiki.h"
 #include "coap-engine.h"
 #include "os/dev/leds.h"
-#include "json_util/json.util.h"  //HO QUALCHE DUBBIO
+#include "json_util.h"
 
 /* Log configuration */
 #include "sys/log.h"
 #define LOG_MODULE "App"
-#define LOG_LEVEL LOG_LEVEL_APP
+#define LOG_LEVEL LOG_LEVEL_INFO
 
 
 static uint8_t reg_temp_status = 0; // 0 off, 1 down, 2 up
