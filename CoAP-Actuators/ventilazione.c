@@ -27,3 +27,4 @@ static coap_message_t request[1];       //cosi possiamo trattare il pacchetto co
 static char *service_registration_url = "/registration"; //!!!!!!!!!!
 static int max_registration_retry = MAX_REGISTRATION_RETRY;
 
+

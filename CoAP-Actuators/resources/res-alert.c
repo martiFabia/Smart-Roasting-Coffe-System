@@ -21,6 +21,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 
 #define BLINK_INTERVAL 1000000 // Intervallo di blinking in microsecondi (1 secondo)
 
+/*
 static void blink_led(uint8_t times) {
     for (uint8_t i = 0; i < times; ++i) {
         leds_on(LEDS_RED); // Accende il LED
@@ -29,7 +30,7 @@ static void blink_led(uint8_t times) {
         clock_delay_usec(BLINK_INTERVAL / 2); // Attende l'altra metà intervallo
     }
 }
-
+*/
 
 RESOURCE(
     res_alert,
@@ -59,7 +60,8 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     //gestione dell'azione
     if (action != NULL && strlen(action) != 0) {
         if ((strncmp(action, "on", len) == 0) && alert_status == 0) {
-            blink_led(3); // Chiama la funzione di blinking con 5 cicli di accensione e spegnimento
+            //blink_led(2); // Chiama la funzione di blinking con 5 cicli di accensione e spegnimento
+            leds_set(LEDS_RED);
             alert_status = 1; //luce accesa
             coap_set_status_code(response, CHANGED_2_04);
         } else if ((strncmp(action, "off", len) == 0) && alert_status == 1) {
