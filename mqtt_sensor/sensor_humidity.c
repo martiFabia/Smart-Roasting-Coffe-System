@@ -143,6 +143,8 @@ static bool out_of_range(int value){
                 return false; 
         }
 
+        return false;
+
 }
 
 /* SENSING SIMULATION */
@@ -168,6 +170,7 @@ static int simulate_humidity_sensing(int value){
             return (rand() %(max_humidity_parameter_THIRD - min_humidity_parameter_THIRD)) + min_humidity_parameter_THIRD;
         }
     }
+    return value;
 }
 
 static void sense_callback(void *ptr){	
