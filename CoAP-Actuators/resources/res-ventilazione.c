@@ -11,12 +11,12 @@ di azione.
 #include "contiki.h"
 #include "coap-engine.h"
 #include "os/dev/leds.h"
-#include "json_util/json.util.h"  //HO QUALCHE DUBBIO
+#include "json_util.h"  
 
 /* Log configuration */
 #include "sys/log.h"
 #define LOG_MODULE "App"
-#define LOG_LEVEL LOG_LEVEL_APP
+#define LOG_LEVEL LOG_LEVEL_INFO
 
 static uint8_t vent_status = 0; // 0 off, 1 on
 leds_on(LEDS_RED);
@@ -68,5 +68,6 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 
     free(action); //pulisco la memoria
 }
+
 
 
