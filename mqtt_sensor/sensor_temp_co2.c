@@ -101,7 +101,7 @@ static int max_co2_parameter = 1000;
 static int min_temp_parameter = 180;
 static int max_temp_parameter = 220;
 
-#define SENSE_PERIOD 		2		    // seconds
+#define SENSE_PERIOD   2		    // seconds
 #define NUM_PERIOD_BEFORE_SEND  30 		// every 1 minute there's one pub
 
 static int num_period = 0;
@@ -139,10 +139,10 @@ static void sense_callback(void *ptr){
     }	
     
     co2_value = simulate_co2_sensing();
-	LOG_INFO("CO2 value detected = %d", co2_value);
+	LOG_INFO("CO2 value detected = %d\n", co2_value);
     
     temp_value = simulate_temp_sensing();
-	LOG_INFO("Temperature value detected = %d", temp_value);
+	LOG_INFO("Temperature value detected = %d\n", temp_value);
 
     //pubblico i dati solo dopo ogni minuto o se si verificano valori fuori range
 	if(num_period >= NUM_PERIOD_BEFORE_SEND){
@@ -160,7 +160,8 @@ static void sense_callback(void *ptr){
         num_period++;
     }
 
-	ctimer_reset(&sensing_timer);
+	ctimer_set(&sensing_timer, SENSE_PERIOD * CLOCK_SECOND, sense_callback, NULL);
+
 }
 
 
@@ -191,7 +192,7 @@ static void mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data
         LOG_INFO("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
 
         state = STATE_DISCONNECTED;
-        process_poll(&sensor_co2_light_temp);
+        process_poll(&sensor_temp_co2);
         break;
     }
     case MQTT_EVENT_PUBLISH: {      //triggered when a new msg is published
@@ -242,7 +243,7 @@ static bool have_connectivity(void){
     return true;
 }
 
-PROCESS_THREAD(sensor_co2_light_temp, ev, data){
+PROCESS_THREAD(sensor_temp_co2, ev, data){
 
     PROCESS_BEGIN();
    
