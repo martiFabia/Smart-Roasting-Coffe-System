@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <time.h>
 
 #include "contiki.h"
@@ -109,15 +110,15 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     if (action != NULL && strlen(action) != 0) {
         uint8_t new_status = 0;
         
-        if (strncmp(action, "T", len) == 0) {
+        if (strncmp(action, "T", len) == 0 && (alert_status == 2 || alert_status == 4 || alert_status == 6 || alert_status == 0)) {
             //new_status = 1; //PER EVENTUALE LAMPEGGIO
             alert_status += 1;
             leds_on(LEDS_RED);
-        } else if (strncmp(action, "U", len) == 0) {
+        } else if (strncmp(action, "U", len) == 0 && (alert_status == 1 || alert_status == 4 || alert_status == 5 || alert_status == 0)) {
             //new_status = 2;
             alert_status += 2;
             leds_on(LEDS_GREEN);
-        } else if (strncmp(action, "G", len) == 0) {
+        } else if (strncmp(action, "G", len) == 0 && (alert_status == 1 || alert_status == 2 || alert_status == 3 || alert_status == 0)) {
            // new_status = 4;
            alert_status += 4;
            leds_on(LEDS_YELLOW);
