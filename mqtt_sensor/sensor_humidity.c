@@ -32,9 +32,9 @@
 #define MQTT_CLIENT_BROKER_IP_ADDR "fd00::1"
 static const char *broker_ip = MQTT_CLIENT_BROKER_IP_ADDR;
 
-// Defaukt config values
+// Default config values
 #define DEFAULT_BROKER_PORT         1883
-#define DEFAULT_PUBLISH_INTERVAL    (30 * CLOCK_SECOND)     //intervallo per la pubblicazione dei dati
+#define DEFAULT_PUBLISH_INTERVAL    (30 * CLOCK_SECOND)    
 
 /*---------------------------------------------------------------------------*/
 /* Maximum TCP segment size for outgoing segments of our socket */
@@ -92,9 +92,9 @@ static bool alarm_state = false;
 static int flag_over_under = -1;     // -1 normal value, 0 over values, 1 under values
 static int button_pressed = 0;
 
-#define SENSE_PERIOD 		2		// seconds
-#define SENSE_PERIOD_ON_ALERT 	1		// seconds
-#define NUM_PERIOD_BEFORE_SEND  30	// every 1 minute there's one pub
+#define SENSE_PERIOD 		6		// seconds
+#define SENSE_PERIOD_ON_ALERT 	3		// seconds
+#define NUM_PERIOD_BEFORE_SEND  10	// every 1 minute there's one pub
 
 // Time tracking
 static uint16_t time_elapsed = 0;
@@ -108,6 +108,7 @@ static int interval = 0;
 button_hal_button_t *btn;
 /*---------------------------------------------------------------------------*/
 
+//funzione per controllare se il valore dell'umidità è fuori dai range impostati
 static bool out_of_range(int value){
 
         if (time_elapsed <= FIRST_INTERVAL) {
@@ -140,20 +141,13 @@ static bool out_of_range(int value){
                 return true; 
             }else 
                 return false; 
-        }else {
-            // Time has exceeded all intervals, start new cycle 
-            alarm_state = false;
-            flag_over_uder = -1; 
-            time_elapsed = 0;  // Reset the timer for the next cycle
-            interval = 1;       //Reset interval 
-            return false; 
         }
 
 }
 
 /* SENSING SIMULATION */
 //simulazione lettura di un sensore di umidità
-static int fake_humidity_sensing(int value){
+static int simulate_humidity_sensing(int value){
 
     if(!alarm_state && out_of_range(value)){   //controllare se il bottone è stato appena premuto
         alarm_state = true; 
@@ -177,7 +171,7 @@ static int fake_humidity_sensing(int value){
 }
 
 static void sense_callback(void *ptr){	
-	value = fake_humidity_sensing(value);
+	value = simulate_humidity_sensing(value);
 	LOG_INFO("Humidity value detected = %d%s", value,(alarm_state)? "\t -> ALERT STATE\n":"\n");
 
     if(!out_of_range(value)){       //quando rientro nel range esco dall'alarm state 
@@ -186,9 +180,9 @@ static void sense_callback(void *ptr){
     }
 
     if(alarm_state)
-        time_elapsed += SENSE_PERIOD_ON_ALERT;
+        time_elapsed = (time_elapsed + SENSE_PERIOD_ON_ALERT) % 16;
     else
-        time_elapsed += SENSE_PERIOD; 
+        time_elapsed = (time_elapsed + SENSE_PERIOD) % 16;
 
 
     if(num_period >= NUM_PERIOD_BEFORE_SEND){
