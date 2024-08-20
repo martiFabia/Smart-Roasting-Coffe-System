@@ -21,7 +21,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 
 RESOURCE(
     res_reg_temp,
-    "title=\"TorrefazioneCaffe: ?acutaor_reg_temp=0..\" POST/PUTaction=<action>\";rt=\"Control\";if=\"actuator\"",
+    "title=\"TorrefazioneCaffe: ?actuator_reg_temp=0..\" POST/PUTaction=<action>\";rt=\"Control\";if=\"actuator\"",
     NULL,
     NULL,
     res_put_handler,
