@@ -134,9 +134,9 @@ static int simulate_temp_sensing(){
 }
 
 static void sense_callback(void *ptr){
-    if (state != STATE_SUBSCRIBED2){
+    /*if (state != STATE_SUBSCRIBED2){
         return;
-    }	
+    }	*/
     
     co2_value = simulate_co2_sensing();
 	LOG_INFO("CO2 value detected = %d\n", co2_value);

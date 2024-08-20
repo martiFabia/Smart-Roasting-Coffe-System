@@ -12,7 +12,8 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-sql = "INSERT INTO dataSensed (value, type) VALUES (%s, %s)"
+sql = "INSERT INTO dataSensed (value, type, interval) VALUES (%s, %s, %s)"
+
 # ------------------------------------------------------------------------------------
 # The callbacks for when the client receives a CONNACK response from the server.
 def on_connect_humidity(client, userdata, flags, rc):
@@ -27,15 +28,34 @@ def on_connect_temp_co2(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-	print(msg.topic+" "+str(msg.payload.decode("utf-8","ignore")))
-	json_payload = json.loads(str(msg.payload.decode("utf-8","ignore")))
-	
-    # insert data into database
-	for key in json_payload:
-		val = (int(json_payload[key]), key[:-6])		# remove _value (ex: co2_value)
-		mycursor.execute(sql, val)
+    print(msg.topic + " " + str(msg.payload.decode("utf-8", "ignore")))
+    
+    # Decodifica del messaggio ricevuto in formato JSON
+    json_payload = json.loads(str(msg.payload.decode("utf-8", "ignore")))
 
-		mydb.commit()
+    if msg.topic == "sensor/humidity":
+        # Gestisci il messaggio di umidità
+        humidity_value = int(json_payload.get("humidity_value", 0))  # valore di umidità
+        interval = int(json_payload.get("interval", 0))  # intervallo associato
+        
+        # Inserisci i dati nel database
+        val_humidity = (humidity_value, "humidity", interval)
+        mycursor.execute(sql, val_humidity)
+
+    elif msg.topic == "sensor/temp_co2":
+        # Gestisci il messaggio di temperatura e CO2
+        temp_value = int(json_payload.get("temp_value", 0))  # valore di temperatura
+        co2_value = int(json_payload.get("co2_value", 0))  # valore di CO2
+        
+        # Inserisci i dati nel database
+        val_temp = (temp_value, "temperature", None)  # Nessun intervallo per temperatura
+        val_co2 = (co2_value, "co2", None)  # Nessun intervallo per CO2
+        
+        mycursor.execute(sql, val_temp)
+        mycursor.execute(sql, val_co2)
+
+    # Conferma le modifiche nel database
+    mydb.commit()
 
 
 on_connect_callbacks = { 

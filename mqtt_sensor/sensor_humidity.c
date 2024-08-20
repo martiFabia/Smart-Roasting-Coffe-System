@@ -92,19 +92,19 @@ static bool alarm_state = false;
 static int flag_over_under = -1;     // -1 normal value, 0 over values, 1 under values
 static int button_pressed = 0;
 
-#define SENSE_PERIOD 		6		// seconds
+#define SENSE_PERIOD 		5		// seconds
 #define SENSE_PERIOD_ON_ALERT 	3		// seconds
-#define NUM_PERIOD_BEFORE_SEND  10	// every 1 minute there's one pub
+#define NUM_PERIOD_BEFORE_SEND  6	// every 30 seconds there's one pub
 
 // Time tracking
 static uint16_t time_elapsed = 0;
-#define FIRST_INTERVAL  (5 * 60)   // 5 minutes
-#define SECOND_INTERVAL (10 * 60)  // 10 minutes
-#define THIRD_INTERVAL  (15 * 60)  // 15 minutes
+#define FIRST_INTERVAL  10          // 10 seconds
+#define SECOND_INTERVAL 20          // 20 seconds
+#define THIRD_INTERVAL  30          // 30 seconds
 
 static int num_period = 0;
 static int is_first_pub_flag = 1;
-static int interval = 0;
+static int interval = 1;
 button_hal_button_t *btn;
 /*---------------------------------------------------------------------------*/
 
@@ -116,7 +116,7 @@ static bool out_of_range(int value){
             if (value < min_humidity_parameter_FIRST) {   
                 flag_over_under = 1; 
                 return true; 
-            }else if (value > max_humidity_parameter_FIRST){
+            }else if (value >= max_humidity_parameter_FIRST){
                 flag_over_under = 0; 
                 return true;
             }else
@@ -126,24 +126,22 @@ static bool out_of_range(int value){
             if (value < min_humidity_parameter_SECOND) {
                 flag_over_under = 1; 
                 return true; 
-            }else if(value > max_humidity_parameter_SECOND){
+            }else if(value >= max_humidity_parameter_SECOND){
                 flag_over_under = 0; 
                 return true; 
             }else 
                 return false;
-        } else if (time_elapsed > SECOND_INTERVAL && time_elapsed <= THIRD_INTERVAL) {
+        } else {
             interval = 3; 
             if (value < min_humidity_parameter_THIRD) {
                 flag_over_under = 1; 
                 return true; 
-            }else if(value > max_humidity_parameter_THIRD){
+            }else if(value >= max_humidity_parameter_THIRD){
                 flag_over_under = 0; 
                 return true; 
             }else 
                 return false; 
         }
-
-        return false;
 
 }
 
@@ -155,52 +153,52 @@ static int simulate_humidity_sensing(int value){
         alarm_state = true; 
         return value; 
     }else if(alarm_state){
-        if(flag_over_under == 1)
+        if(flag_over_under == 1)        //humidty under the min value
             return (value += 5);
-        if(flag_over_under == 0)
+        if(flag_over_under == 0)        //humidity over the max value
             return (value -= 5); 
-    }else if(!out_of_range(value)){
+    }else {                         //normal state
+
         if(interval == 1){
             return (rand() %(max_humidity_parameter_FIRST - min_humidity_parameter_FIRST)) + min_humidity_parameter_FIRST;
-        }
-        if(interval == 2){
+        }else if(interval == 2){
             return (rand() %(max_humidity_parameter_SECOND - min_humidity_parameter_SECOND)) + min_humidity_parameter_SECOND;
-        }
-        if(interval == 3){
+        }else{
             return (rand() %(max_humidity_parameter_THIRD - min_humidity_parameter_THIRD)) + min_humidity_parameter_THIRD;
         }
     }
-    return value;
+
 }
 
 static void sense_callback(void *ptr){	
 	value = simulate_humidity_sensing(value);
 	LOG_INFO("Humidity value detected = %d%s", value,(alarm_state)? "\t -> ALERT STATE\n":"\n");
 
-    if(!out_of_range(value)){       //quando rientro nel range esco dall'alarm state 
-        alarm_state = false; 
-        flag_over_under = -1; 
-    }
 
     if(alarm_state)
-        time_elapsed = (time_elapsed + SENSE_PERIOD_ON_ALERT) % 16;
+        time_elapsed = (time_elapsed + SENSE_PERIOD_ON_ALERT) % 31;     //modulo 31 cosi da non superare il tempo massimo e ricominciare da 0
     else
-        time_elapsed = (time_elapsed + SENSE_PERIOD) % 16;
+        time_elapsed = (time_elapsed + SENSE_PERIOD) % 31;
 
 
     if(num_period >= NUM_PERIOD_BEFORE_SEND){
         sprintf(pub_topic, "%s", "sensor/humidity");	
-        sprintf(app_buffer, "{ \"humidity_value\": %d }", value);
+         sprintf(app_buffer, "{ \"humidity_value\": %d, \"interval\": %d }", value, interval);
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
         num_period = 0;
     }
     else if(alarm_state){
         sprintf(pub_topic, "%s", "sensor/humidity");	
-        sprintf(app_buffer, "{ \"humidity_value\": %d }", value);
+        sprintf(app_buffer, "{ \"humidity_value\": %d, \"interval\": %d }", value, interval);
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
     }
     else{
         num_period++;
+    }
+
+    if(!out_of_range(value)){       //quando rientro nel range esco dall'alarm state 
+        alarm_state = false; 
+        flag_over_under = -1; 
     }
 
     if(alarm_state)
@@ -369,19 +367,19 @@ PROCESS_THREAD(sensor_humidity, ev, data){
            button_pressed++;
            if(button_pressed == 1){     //umidità supera limite max dell'intervallo in cui si trova il processo 
                 if (time_elapsed <= FIRST_INTERVAL)
-                    value = max_humidity_parameter_FIRST + 10; 
+                    value = (rand() % 20) + max_humidity_parameter_FIRST; 
                 else if (time_elapsed > FIRST_INTERVAL && time_elapsed <= SECOND_INTERVAL)
-                    value = max_humidity_parameter_SECOND + 10;
+                    value = (rand() % 20) + max_humidity_parameter_SECOND;
                 else if (time_elapsed > SECOND_INTERVAL && time_elapsed <= THIRD_INTERVAL) 
-                    value = max_humidity_parameter_THIRD + 10;
+                    value = (rand() % 20) + max_humidity_parameter_THIRD;
 
            }else if(button_pressed == 2){   //umidità scende sotto limite min dell'intervallo in cui si trova il processo 
                 if (time_elapsed <= FIRST_INTERVAL)
-                    value = min_humidity_parameter_FIRST - 10; 
+                    value = rand() % min_humidity_parameter_FIRST; 
                 else if (time_elapsed > FIRST_INTERVAL && time_elapsed <= SECOND_INTERVAL)
-                    value = min_humidity_parameter_SECOND - 10;
+                    value = rand() % min_humidity_parameter_SECOND;
                 else if (time_elapsed > SECOND_INTERVAL && time_elapsed <= THIRD_INTERVAL)
-                    value = min_humidity_parameter_THIRD - 10;
+                    value = rand() % min_humidity_parameter_THIRD;
 
                 button_pressed = 0; 
             }
