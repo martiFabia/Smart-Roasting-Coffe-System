@@ -63,7 +63,7 @@ AUTOSTART_PROCESSES(&alert_thread);
 PROCESS_THREAD(alert_thread, ev, data){
 	
 	PROCESS_BEGIN();
-    leds_on(LEDS_RED);
+    
 
     while(max_registration_retry != 0){
 
