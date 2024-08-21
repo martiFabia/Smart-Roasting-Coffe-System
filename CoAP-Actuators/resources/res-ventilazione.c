@@ -19,7 +19,7 @@ di azione.
 #define LOG_LEVEL LOG_LEVEL_INFO
 
 static uint8_t vent_status = 0; // 0 off, 1 on
-leds_on(LEDS_RED);
+ 
 
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, 
                             uint16_t preferred_size, int32_t *offset);
@@ -28,7 +28,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 
 RESOURCE(
     res_vent,
-    "title=\"TorrefazioneCaffe: ?acutaor_vent=0..\" POST/PUTaction=<action>\";rt=\"Control\";if=\"actuator\"",
+    "title=\"TorrefazioneCaffe: ?actuator_vent=0..\" POST/PUTaction=<action>\";rt=\"Control\";if=\"actuator\"",
     NULL,
     NULL,
     res_put_handler,

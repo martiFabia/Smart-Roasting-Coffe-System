@@ -34,7 +34,7 @@ static void blink_led(uint8_t times) {
 
 RESOURCE(
     res_alert,
-    "title=\"TorrefazioneCaffe: ?acutaor_alert=0..\" POST/PUTaction=<action>\";rt=\"Control\";if=\"actuator\"",
+    "title=\"TorrefazioneCaffe: ?actuator_alert=0..\" POST/PUTaction=<action>\";rt=\"Control\";if=\"actuator\"",
     NULL,
     NULL,
     res_put_handler,
