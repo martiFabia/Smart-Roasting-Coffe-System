@@ -37,7 +37,7 @@ RESOURCE(
 
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-    char* action = NULL //per azione richiesta
+    char* action = NULL; //per azione richiesta
     int len = 0; //per lunghezza payload richiesta
     const uint8_t* chunk; //puntatore ai dati 
 
@@ -52,11 +52,11 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     //gestione dell'azione
     if (action != NULL && strlen(action) != 0) {
         if ((strncmp(action, "on", len) == 0) && vent_status == 0) {
-            leds_set(LEDS_GREEN); //luce accesa = luce verde 
+            leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN)); //luce accesa = luce verde 
             vent_status = 1; //luce accesa
             coap_set_status_code(response, CHANGED_2_04);
         } else if ((strncmp(action, "off", len) == 0) && vent_status == 1) {
-            leds_set(LEDS_RED); //luce spenta = luce rossa
+            leds_set(LEDS_NUM_TO_MASK(LEDS_RED)); //luce spenta = luce rossa
             vent_status = 0; //spengo
             coap_set_status_code(response, CHANGED_2_04);
         } else {

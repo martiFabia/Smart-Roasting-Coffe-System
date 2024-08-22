@@ -33,8 +33,6 @@ static int max_registration_retry = MAX_REGISTRATION_RETRY;
 //gestione quindi della risposta del server al tentativo di registrazione
 void client_chunk_handler(coap_message_t *response){
 
-    const uint8_t *chunk; 
-
     if(response == NULL){
         LOG_ERR("Request timed out\n");
     }else if(response->code != CREATED_2_01){
@@ -61,11 +59,11 @@ AUTOSTART_PROCESSES(&vent_thread);
 PROCESS_THREAD(vent_thread, ev, data){
 	
 	PROCESS_BEGIN();
-    leds_on(LEDS_RED);
+    leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 
     while(max_registration_retry != 0){
 
-        coap_endpoint_parse(SERVER_EP, strlen(SERVER_EP, &server_ep)); //populate the endpoint data structure
+        coap_endpoint_parse(SERVER_EP, strlen(SERVER_EP), &server_ep); //populate the endpoint data structure
 
         coap_init_message(request, COAP_TYPE_CON, COAP_POST, 0);
         coap_set_header_uri_path(request, service_registration_url);

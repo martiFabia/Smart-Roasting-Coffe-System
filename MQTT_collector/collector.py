@@ -6,7 +6,7 @@ import json
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="root",
+  password="root1234",
   database="RoastingMachine"
 )
 

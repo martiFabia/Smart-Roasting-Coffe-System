@@ -61,11 +61,11 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     if (action != NULL && strlen(action) != 0) {
         if ((strncmp(action, "on", len) == 0) && alert_status == 0) {
             //blink_led(2); // Chiama la funzione di blinking con 5 cicli di accensione e spegnimento
-            leds_set(LEDS_RED);
+            leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
             alert_status = 1; //luce accesa
             coap_set_status_code(response, CHANGED_2_04);
         } else if ((strncmp(action, "off", len) == 0) && alert_status == 1) {
-            leds_off(LEDS_RED); //luce spenta 
+            leds_off(LEDS_NUM_TO_MASK(LEDS_RED)); //luce spenta 
             alert_status = 0; //spengo
             coap_set_status_code(response, CHANGED_2_04);
         } else {

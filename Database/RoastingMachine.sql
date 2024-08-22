@@ -16,7 +16,7 @@ CREATE TABLE dataSensed (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     value INT,
     type VARCHAR(256),
-    interval INT
+    `interval` INT
 );
 
 -- Drop the actuators table if it exists

@@ -1,17 +1,21 @@
-CONTIKI_PROJECT = coap-actuator
+CONTIKI = ../../..
+
+# Nome del progetto
+CONTIKI_PROJECT = CoAP-Actuators
 all: $(CONTIKI_PROJECT)
 
-# Do not try to build on Sky because of code size limitation
+# Escludi piattaforme non supportate
 PLATFORMS_EXCLUDE = sky z1
 
-# Include CoAP resources
+# Include moduli e risorse
 MODULES_REL += ./resources
-MODULES_REL += ../../json_util
+MODULES_REL += ../json_util
 
-CONTIKI=../../..
-
-# Include the CoAP implementation
-include $(CONTIKI)/Makefile.dir-variables
+# Include la libreria CoAP
 MODULES += $(CONTIKI_NG_APP_LAYER_DIR)/coap
 
+# Include file di configurazione di Contiki
+include $(CONTIKI)/Makefile.dir-variables
 include $(CONTIKI)/Makefile.include
+
+
