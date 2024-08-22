@@ -14,7 +14,6 @@
 
 
 static uint8_t reg_temp_status = 0; // 0 off, 1 down, 2 up
-leds_set(LEDS_RED); //spento = led rosso
 
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, 
                             uint16_t preferred_size, int32_t *offset);
@@ -31,7 +30,7 @@ RESOURCE(
 
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-    char* action = NULL //per azione richiesta
+    char* action = NULL; //per azione richiesta
     int len = 0; //per lunghezza payload richiesta
     const uint8_t* chunk; //puntatore ai dati 
 
@@ -47,11 +46,12 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     if(action!=NULL && strlen(action)!=0){
         if((strncmp(action, "up", len) == 0)){  //qunado up luce verde
             if(reg_temp_status == 0){ //era spenta
-                leds_off(LEDS_RED);
-                leds_set(LEDS_GREEN);
+                //leds_off(LEDS_RED);
+                leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
                 reg_temp_status = 2;
             }else if(reg_temp_status == 1){ //era impostata a down
-                leds_off(LEDS_RED); //PER DOWN LUCE GIALLA = RED + GREEN, spengo solo red per avere green
+                //leds_off(LEDS_RED); //PER DOWN LUCE GIALLA = RED + GREEN, spengo solo red per avere green
+                leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
                 reg_temp_status++;
             }else{
                 LOG_ERR("already up");
@@ -61,10 +61,12 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 	    }
         else if((strncmp(action, "down", len) == 0)){
             if(reg_temp_status == 2){ //era up
-                leds_on(LEDS_RED);
+                //leds_on(LEDS_RED);
+                leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
                 reg_temp_status--;
             }else if(reg_temp_status == 0){ //era spenta
-                leds_on(LEDS_GREEN);	
+                //leds_on(LEDS_GREEN);	
+                leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
                 reg_temp_status++;
             }else{
                 LOG_INFO("Already down");
@@ -74,7 +76,8 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 	    }
         else if((strncmp(action, "off", len) == 0)){
             reg_temp_status = 0;
-            leds_off(LEDS_GREEN);
+            //leds_off(LEDS_GREEN);
+            leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
             coap_set_status_code(response, CHANGED_2_04);
 	    }
         else
