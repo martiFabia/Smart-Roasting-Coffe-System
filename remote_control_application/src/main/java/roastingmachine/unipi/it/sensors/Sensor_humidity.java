@@ -41,7 +41,7 @@ public class Sensor_humidity extends Utility_sensor{
     public void setActionMax(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("vent");
         if(resourcesMan.getStatus().equals("off"))
-            new CoapClientThread(resourceDAO, "on").start();
+            //new CoapClientThread(resourcesMan, "on").start();
     }
 
 }
