@@ -9,30 +9,34 @@ classe che ci permette di comunicare con gli attuatori
 package roastingmachine.unipi.it.proc;
 
 import roastingmachine.unipi.it.resources.ResourcesMan;
-import org.eclipse.californium.core.*;
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.CoAP;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
+import org.eclipse.californium.core.coap.Request;
 import org.json.simple.JSONObject;
 
-public class CoapClient extends Thread{
+public class CoapClientSys extends Thread{
 
     private ResourcesMan resourcesMan;
     private String action;
 
-    public CoapClient(ResourcesMan resourcesMan, String action) {
+    public CoapClientSys(ResourcesMan resourcesMan, String action) {
         this.resourcesMan = resourcesMan;
         this.action = action;
     }
 
     public void run() {
-        String uri = "coap://" resourcesMan.getIp()+"/" resourcesMan.getResource();
+        String uri = "coap://"+ resourcesMan.getIp()+"/"+ resourcesMan.getResource();
 
         CoapClient client = new CoapClient(uri);
         
-        Request req = new Request(CoAP.Code.PUT);
+        Request request = new Request(CoAP.Code.PUT);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("action", action);
-        req.setaction(jsonObject.toJSONString());
-        req.getOptions().setAccept(MediaTypeRegistry.APPLICATION_JSON);
-        CoapResponse response = client.advanced(req);
+        request.setPayload(jsonObject.toJSONString());
+        request.getOptions().setAccept(MediaTypeRegistry.APPLICATION_JSON);
+        CoapResponse response = client.advanced(request);
         if (response!=null) {
             CoAP.ResponseCode code = response.getCode();
             switch (code) {

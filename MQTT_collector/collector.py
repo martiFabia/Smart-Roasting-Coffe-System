@@ -12,7 +12,7 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-sql = "INSERT INTO dataSensed (value, type, interval) VALUES (%s, %s, %s)"
+sql = "INSERT INTO your_table_name (humidity_value, type, `interval`) VALUES (%s, %s, %s)"
 
 # ------------------------------------------------------------------------------------
 # The callbacks for when the client receives a CONNACK response from the server.

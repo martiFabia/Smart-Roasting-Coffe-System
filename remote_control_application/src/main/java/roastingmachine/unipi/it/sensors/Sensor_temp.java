@@ -1,6 +1,7 @@
 package roastingmachine.unipi.it.sensors;
 
 import roastingmachine.unipi.it.resources.ResourcesMan;
+import roastingmachine.unipi.it.proc.CoapClientSys;
 // IMPORTARE THREAD PER COMUNICAZIONE COAP
 
 public class Sensor_temp extends Utility_sensor{
@@ -19,30 +20,23 @@ public class Sensor_temp extends Utility_sensor{
         return INSTANCE;
     }
 
-     public static Sensor_temp getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new Sensor_temp();
-        }
-
-        return INSTANCE;
-    }
 
     public void setActionMin(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
         if(resourcesMan.getStatus().equals("off") || resourcesMan.getStatus().equals("down") )
-             new CoapClient(resourcesMan, "up").start();
+             new CoapClientSys(resourcesMan, "up").start();
     }
 
      public void setActionMax(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
         if(resourcesMan.getStatus().equals("up") || resourcesMan.getStatus().equals("off"))
-             new CoapClient(resourcesMan, "down").start();
+             new CoapClientSys(resourcesMan, "down").start();
     }
 
     public void setActionOK(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
-        if(resourcesMan.getStatus().equals("on"))
-             new CoapClient(resourcesMan, "off").start();
+        if(resourcesMan.getStatus().equals("up") || resourcesMan.getStatus().equals("down") )
+             new CoapClientSys(resourcesMan, "off").start();
     }
 
 

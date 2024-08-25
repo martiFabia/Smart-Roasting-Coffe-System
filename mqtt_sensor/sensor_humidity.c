@@ -167,6 +167,7 @@ static int simulate_humidity_sensing(int value){
             return (rand() %(max_humidity_parameter_THIRD - min_humidity_parameter_THIRD)) + min_humidity_parameter_THIRD;
         }
     }
+    return 0;
 
 }
 

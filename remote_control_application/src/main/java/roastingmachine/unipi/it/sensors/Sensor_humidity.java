@@ -1,6 +1,7 @@
 package roastingmachine.unipi.it.sensors;
 
 import roastingmachine.unipi.it.resources.ResourcesMan;
+import roastingmachine.unipi.it.proc.CoapClientSys;
 // IMPORTARE THREAD PER COMUNICAZIONE COAP
 
 public class Sensor_humidity extends Utility_sensor{
@@ -41,12 +42,12 @@ public class Sensor_humidity extends Utility_sensor{
     public void setActionMax(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("vent");
         if(resourcesMan.getStatus().equals("off"))
-             new CoapClient(resourcesMan, "on").start();
+             new CoapClientSys(resourcesMan, "on").start();
     }
     public void setActionOK(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("vent");
         if(resourcesMan.getStatus().equals("on"))
-             new CoapClient(resourcesMan, "off").start();
+             new CoapClientSys(resourcesMan, "off").start();
     }
 
 }

@@ -36,8 +36,7 @@ void client_chunk_handler(coap_message_t *response){
     if(response == NULL){
         LOG_ERR("Request timed out\n");
     }else if(response->code != CREATED_2_01){
-        LOG_ERR("Errore. Codice ricevuto:
-         %d\n", response->code);
+        LOG_ERR("Errore. Codice ricevuto:%d\n", response->code);
     }else{ //se sono qui è andato tutto bene
         LOG_INFO("Registrazione riuscita!\n");
         max_registration_retry = 0;
