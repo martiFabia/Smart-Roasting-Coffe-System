@@ -31,18 +31,28 @@ public class Sensor_co2 extends Utility_sensor{
     }
 
     public void setActionMax(){
-        if(Sensor_co2.getInstance().getValue()>Sensor_co2.getInstance().getMax()){ //se si supera la soglia massima di 500 parte l'alert
-           if(Sensor_co2.getInstance().getValue()>Sensor_co2.getInstance().getMax()+500){
+        
+           if(Sensor_co2.getInstance().getValue()>Sensor_co2.getInstance().getMax()+200){ //se la supera di piu di 200 parte l'alert
                 ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("alert");
-                //new CoapClientThread(resourcesMan, "on").start();
+                new CoapClient(resourcesMan, "on").start();
            }
             ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("vent");
-            //new CoapClientThread(resourcesMan, "on").start();
-        }
+                new CoapClient(resourcesMan, "on").start();
+        
             
+    }
+
+    public void setActionOK(){
+        ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("alert");
+        if(resourcesMan.getStatus().equals("on")){
+            new CoapClient(resourcesMan, "off").start();
+        }
+        ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("vent");
+        if(resourcesMan.getStatus().equals("on")){
+            new CoapClient(resourcesMan, "off").start();
+        }
     }
 
 }
 
 
-/* da ricontrollare, se i valori tornano normali come si torna off?, è notte ora */

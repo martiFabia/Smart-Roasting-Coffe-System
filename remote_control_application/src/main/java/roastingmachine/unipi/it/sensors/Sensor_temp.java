@@ -30,16 +30,21 @@ public class Sensor_temp extends Utility_sensor{
     public void setActionMin(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
         if(resourcesMan.getStatus().equals("off") || resourcesMan.getStatus().equals("down") )
-            //new CoapClientThread(resourcesMan, "up").start();
+             new CoapClient(resourcesMan, "up").start();
     }
 
      public void setActionMax(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
         if(resourcesMan.getStatus().equals("up") || resourcesMan.getStatus().equals("off"))
-            //new CoapClientThread(resourcesMan, "down").start();
+             new CoapClient(resourcesMan, "down").start();
     }
+
+    public void setActionOK(){
+        ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
+        if(resourcesMan.getStatus().equals("on"))
+             new CoapClient(resourcesMan, "off").start();
+    }
+
 
 }
 
-
-/* da ricontrollare, se i valori tornano normali come si torna off?, è notte ora */
