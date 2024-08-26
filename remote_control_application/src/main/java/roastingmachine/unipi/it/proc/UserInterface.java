@@ -73,7 +73,8 @@ public class UserInterface extends Thread{
 
                 case "/change_parameters":
                     System.out.println("|                                              |");
-                    System.out.println("| Type the parameter you want to change        |");
+                    System.out.println("| Type the parameter you want to change,       |");
+                    System.out.println("| then insert an integer                       |");
                     System.out.println("|  1. /min_humidity_parameter_FIRST            |");
                     System.out.println("|  2. /max_humidity_parameter_FIRST            |");
                     System.out.println("|  3. /min_humidity_parameter_SECOND           |");
@@ -86,9 +87,27 @@ public class UserInterface extends Thread{
                     System.out.println("|  10. /max_temp_parameter                     |");
                     try {
                         comando = reader.readLine();
-                        show_params(comando);
+                        if(comando.equals("0")){
+                               break;
+                            }
+                        String value = reader.readLine();
+                        int val = Integer.parseInt(value);
+                        change_parameters(comando,val);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
+                    }
+
+                    try {
+                        MqttClient client = new MqttClient(broker, clientId);
+                        client.connect();
+                        String content;
+                        for (String topic : is_changed.keySet()) {
+                            send_mqtt(client, "param/" + topic);
+                        }
+                        client.disconnect();
+
+                    } catch (MqttException e) {
+                        e.printStackTrace();
                     }
                     break;
 
@@ -98,6 +117,58 @@ public class UserInterface extends Thread{
             }
         }
 
+    }
+
+    private void send_mqtt(MqttClient client, String topic) throws MqttException{
+
+    }
+
+
+    private void change_parameters(String comando, int value){
+        switch(comando){
+            case "/min_humidity_parameter_FIRST":
+                Sensor_humidity.getInstance().setMin_Hum(1, value);
+                is_changed.put("humidity", true);
+                break;
+            case "/max_humidity_parameter_FIRST":
+                Sensor_humidity.getInstance().setMax_Hum(1, value);
+                is_changed.put("humidity", true);
+                break;
+            case "/min_humidity_parameter_SECOND":
+                Sensor_humidity.getInstance().setMin_Hum(2, value);
+                is_changed.put("humidity", true);
+                break;
+            case "/max_humidity_parameter_SECOND":
+                Sensor_humidity.getInstance().setMax_Hum(2, value);
+                is_changed.put("humidity", true);
+                break;
+            case "/min_humidity_parameter_THIRD":
+                Sensor_humidity.getInstance().setMin_Hum(3, value);
+                is_changed.put("humidity", true);
+                break;
+            case "/max_humidity_parameter_THIRD":
+                Sensor_humidity.getInstance().setMax_Hum(3, value);
+                is_changed.put("humidity", true);
+                break;
+            case "/min_co2_parameter":
+                Sensor_co2.getInstance().setMin(value);
+                is_changed.put("co2", true);
+                break;
+            case "/max_co2_parameter":
+                Sensor_co2.getInstance().setMax(value);
+                is_changed.put("co2", true);
+                break;
+            case "/min_temp_parameter":
+                Sensor_temp.getInstance().setMin(value);
+                is_changed.put("temp", true);
+                break;
+            case "/max_temp_parameter":
+                Sensor_co2.getInstance().setMax(value);
+                is_changed.put("temp", true);
+                break;
+            default:
+                print_help();
+        }
     }
 
     private void show_params(String comando){

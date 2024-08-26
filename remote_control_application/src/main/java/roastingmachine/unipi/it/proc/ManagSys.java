@@ -55,7 +55,7 @@ public class ManagSys extends Thread {
                         ResultSet res = ps.executeQuery();
                         while (res.next()) {
                             int value = res.getInt("value");
-                            int interv = res.getInt("`interval`");
+                            int interv = res.getInt("interval");
 
                             values.put(str, value);
                             sens.get(str).setValue(value);
