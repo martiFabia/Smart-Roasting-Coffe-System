@@ -55,6 +55,7 @@ public class ManagSys extends Thread {
                         ResultSet res = ps.executeQuery();
                         while (res.next()) {
                             int value = res.getInt("value");
+                             
 
                             values.put(str, value);
                             sens.get(str).setValue(value);
@@ -72,13 +73,28 @@ public class ManagSys extends Thread {
                         if (values.containsKey(type)) {
                             int value = values.get(type);
 
-                            if(value < sens.get(type).getMin()){
-                                sens.get(type).setActionMin();
-                            } else if (value >= sens.get(type).getMax()) {
-                                sens.get(type).setActionMax();
-                            } else {
-                                sens.get(type).setActionOK();
-                            }
+                           // l'intervallo me lo devo gestire dinamicamente qui, controllando il valore che ha in values
+                           // posso trovarlo dalla query sopra. Il problema è che poi il compilatore non trova la funzione
+                      /*      if(type.equals("humidity")){ //devo gestire gli intervalli
+                                
+                                int max_h = sens.get(type).getMax_Hum(inter);
+
+                                if (value >= max_h) {
+                                    sens.get(type).setActionMax();
+                                } else {
+                                    sens.get(type).setActionOK();
+                                }
+
+                            }else{*/
+
+                                if(value < sens.get(type).getMin()){
+                                    sens.get(type).setActionMin();
+                                } else if (value >= sens.get(type).getMax()) {
+                                    sens.get(type).setActionMax();
+                                } else {
+                                    sens.get(type).setActionOK();
+                                }
+                            //}
                         }
                     }
                 }

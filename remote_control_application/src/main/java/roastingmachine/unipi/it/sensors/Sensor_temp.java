@@ -19,12 +19,13 @@ public class Sensor_temp extends Utility_sensor{
 
         return INSTANCE;
     }
-
+    
+  
 
     public void setActionMin(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
         if(resourcesMan.getStatus().equals("off") || resourcesMan.getStatus().equals("down") )
-             new CoapClientSys(resourcesMan, "up").start();
+            new CoapClientSys(resourcesMan, "up").start();
     }
 
      public void setActionMax(){

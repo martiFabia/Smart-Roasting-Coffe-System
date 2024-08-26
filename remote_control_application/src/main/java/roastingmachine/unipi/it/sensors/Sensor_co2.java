@@ -20,21 +20,25 @@ public class Sensor_co2 extends Utility_sensor{
         return INSTANCE;
     }
 
-   
+
 
     public void setActionMin(){
     }
 
     public void setActionMax() {
         // Gestione dell'allerta CO2
-        if (Sensor_co2.getInstance().getValue() > Sensor_co2.getInstance().getMax() + 200) { // Se il valore supera il massimo di 200
+        if (Sensor_co2.getInstance().getValue() > Sensor_co2.getInstance().getMax() + 100) { // Se il valore supera il massimo di 200
             ResourcesMan alertResourcesMan = ResourcesMan.retrieveInformation("alert");
-            new CoapClientSys(alertResourcesMan, "on").start();
+            if (alertResourcesMan.getStatus().equals("off")) {
+                new CoapClientSys(alertResourcesMan, "on").start();
+            }
+            
         }
-
         // Gestione della ventola
         ResourcesMan ventResourcesMan = ResourcesMan.retrieveInformation("vent");
-        new CoapClientSys(ventResourcesMan, "on").start();
+        if (ventResourcesMan.getStatus().equals("off")) {
+            new CoapClientSys(ventResourcesMan, "on").start();
+        }
     }
 
     public void setActionOK() {
