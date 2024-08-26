@@ -36,12 +36,10 @@ public abstract class Utility_sensor{ //classe che per essere utilizzata deve es
         return max;
     }
 
-    public int getInterval() {
-        return this.interval;
-    }
+   
 
     public abstract void setActionMin();
     public abstract void setActionMax();
-
-
+    public abstract void setActionOK();
+    
 }

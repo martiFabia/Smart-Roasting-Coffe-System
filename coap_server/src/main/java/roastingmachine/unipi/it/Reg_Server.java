@@ -9,7 +9,7 @@ public class Reg_Server extends CoapServer {
         Reg_Server server = new Reg_Server();
         server.add(new SQLControl("registration"));
         server.start();
-        System.out.println("\nServer starts!\n");
+        System.out.println("\nServer start!\n");
     }
 
 }

@@ -12,7 +12,7 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-sql = "INSERT INTO dataSensed (value, type, interval) VALUES (%s, %s, %s)"
+sql = "INSERT INTO dataSensed (value, type, `interval`) VALUES (%s, %s, %s)"
 
 # ------------------------------------------------------------------------------------
 # The callbacks for when the client receives a CONNACK response from the server.
@@ -69,7 +69,6 @@ def mqtt_client(topic):
 	client.on_connect = on_connect_callbacks[topic]
 	client.on_message = on_message
 	client.connect("127.0.0.1", 1883, 60)   # connect to broker
-	
 	client.loop_forever()   # start the loop that waits for data
 
 
