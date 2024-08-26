@@ -20,7 +20,6 @@ public class Sensor_temp extends Utility_sensor{
         return INSTANCE;
     }
     
-  
 
     public void setActionMin(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");

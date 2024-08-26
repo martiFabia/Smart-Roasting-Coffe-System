@@ -53,7 +53,6 @@ public class Sensor_humidity extends Utility_sensor{
         return intervalLimits[interval - 1][1];
     }
 
-
     public void setActionMin(){  
     }
     public void setActionMax(){

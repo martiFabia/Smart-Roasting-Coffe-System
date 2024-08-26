@@ -72,6 +72,26 @@ public class UserInterface extends Thread{
                     break;
 
                 case "/change_parameters":
+                    System.out.println("|                                              |");
+                    System.out.println("| Type the parameter you want to change        |");
+                    System.out.println("|  1. /min_humidity_parameter_FIRST            |");
+                    System.out.println("|  2. /max_humidity_parameter_FIRST            |");
+                    System.out.println("|  3. /min_humidity_parameter_SECOND           |");
+                    System.out.println("|  4. /max_humidity_parameter_SECOND           |");
+                    System.out.println("|  5. /min_humidity_parameter_THIRD            |");
+                    System.out.println("|  6. /max_humidity_parameter_THIRD            |");
+                    System.out.println("|  7. /min_co2_parameter                       |");
+                    System.out.println("|  8. /max_co2_parameter                       |");
+                    System.out.println("|  9. /min_temp_parameter                      |");
+                    System.out.println("|  10. /max_temp_parameter                     |");
+                    try {
+                        comando = reader.readLine();
+                        show_params(comando);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
                 case "/change_actuators_status":
                 default: 
                     print_help();
