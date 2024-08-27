@@ -51,6 +51,7 @@ public class UserInterface extends Thread{
                     System.out.println("|                                              |");
                     try {
                         comando = reader.readLine();
+                        comando = comando.toLowerCase();
                         show_actuator(comando);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -65,6 +66,7 @@ public class UserInterface extends Thread{
                     System.out.println("|                                              |");
                     try {
                         comando = reader.readLine();
+                        comando = comando.toLowerCase();
                         show_params(comando);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -90,6 +92,7 @@ public class UserInterface extends Thread{
                         if(comando.equals("0")){
                                break;
                             }
+                        comando = comando.toLowerCase();
                         String value = reader.readLine();
                         int val = Integer.parseInt(value);
                         change_parameters(comando,val);
@@ -112,6 +115,24 @@ public class UserInterface extends Thread{
                     break;
 
                 case "/change_actuators_status":
+                    System.out.println("|                                              |");
+                    System.out.println("| Type the command you want to run             |");
+                    System.out.println("|  1. /reg_temp_up                             |");
+                    System.out.println("|  2. /reg_temp_off                            |");
+                    System.out.println("|  3. /reg_temp_down                           |");
+                    System.out.println("|  4. /alert_on                                |");
+                    System.out.println("|  5. /alert_off                               |");
+                    System.out.println("|  6. /vent_on                                 |");
+                    System.out.println("|  7. /vent_off                                |");
+                    System.out.println("|                                              |");
+                    try {
+                        comando = reader.readLine();
+                        comando = comando.toLowerCase();
+                        action_actuators(comando);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
                 default: 
                     print_help();
             }
@@ -119,8 +140,81 @@ public class UserInterface extends Thread{
 
     }
 
-    private void send_mqtt(MqttClient client, String topic) throws MqttException{
+    private void action_actuators(String comando) {
+    String value;
+    ResourcesMan res;
+    String resourceType = null;
 
+    switch (comando) {
+        case "/reg_temp_up":
+            value = "up";
+            resourceType = "reg_temp";
+            break;
+        case "/reg_temp_off":
+            value = "off";
+            resourceType = "reg_temp";
+            break;
+        case "/reg_temp_down":
+            value = "down";
+            resourceType = "reg_temp";
+            break;
+        case "/alert_on":
+            value = "on";
+            resourceType = "alert";
+            break;
+        case "/alert_off":
+            value = "off";
+            resourceType = "alert";
+            break;
+        case "/vent_on":
+            value = "on";
+            resourceType = "vent";
+            break;
+        case "/vent_off":
+            value = "off";
+            resourceType = "vent";
+            break;
+        default:
+            print_help();
+            return;
+    }
+
+    res = ResourcesMan.retrieveInformation(resourceType);
+    if (res.getStatus().equals(value)) {
+        System.out.println(resourceType + " already " + value);
+        return;
+    }
+
+    new CoapClientSys(res, value).start();
+}
+
+
+    private void send_mqtt(MqttClient client, String topic) throws MqttException{
+        
+        JSONObject jsonObject = new JSONObject();
+        switch(topic) {
+            case "param/humidity":
+                jsonObject.put("min_humidity_parameter_FIRST",Sensor_humidity.getInstance().getMin_Hum(1));
+                jsonObject.put("max_humidity_parameter_FIRST",Sensor_humidity.getInstance().getMax_Hum(1));
+                jsonObject.put("min_humidity_parameter_SECOND",Sensor_humidity.getInstance().getMin_Hum(2));
+                jsonObject.put("max_humidity_parameter_SECOND",Sensor_humidity.getInstance().getMax_Hum(2));
+                jsonObject.put("min_humidity_parameter_THIRD",Sensor_humidity.getInstance().getMin_Hum(3));
+                jsonObject.put("max_humidity_parameter_THIRD",Sensor_humidity.getInstance().getMax_Hum(3));
+                break;
+            case "param/co2":
+                jsonObject.put("min_co2_parameter",Sensor_co2.getInstance().getMin());
+                jsonObject.put("max_co2_parameter",Sensor_co2.getInstance().getMax());
+                break;
+            case "param/temp":
+                jsonObject.put("min_temp_parameter",Sensor_temp.getInstance().getMin());
+                jsonObject.put("max_temp_parameter",Sensor_temp.getInstance().getMax());
+                break;
+            default:
+                print_help();
+        }
+
+        MqttMessage message = new MqttMessage(jsonObject.toJSONString().getBytes());
+        client.publish(topic, message);
     }
 
 
