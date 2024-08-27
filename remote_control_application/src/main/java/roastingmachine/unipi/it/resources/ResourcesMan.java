@@ -26,7 +26,7 @@ public class ResourcesMan {
      public static ResourcesMan retrieveInformation(String actuator){
         String resource = null;
         ResourcesMan resourcesMan = null;
-        // in a real environment this mapping (or the following query) need to be changed
+        
         switch(actuator){
             case "reg_temp":
                 resource = "actuator_reg_temp";
