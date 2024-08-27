@@ -2,7 +2,7 @@ package roastingmachine.unipi.it.sensors;
 
 import roastingmachine.unipi.it.resources.ResourcesMan;
 import roastingmachine.unipi.it.proc.CoapClientSys;
-// IMPORTARE THREAD PER COMUNICAZIONE COAP
+
 
 public class Sensor_temp extends Utility_sensor{
     private static Sensor_temp INSTANCE;

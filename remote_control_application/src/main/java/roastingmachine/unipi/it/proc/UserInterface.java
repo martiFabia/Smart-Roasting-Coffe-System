@@ -343,8 +343,8 @@ public class UserInterface extends Thread{
         System.out.println("|                                              |");
         System.out.println("|  1. /SHOW_ACTUATORS_STATUS                   |");
         System.out.println("|  2. /SHOW_PARAMETERS                         |");
-        System.out.println("|  2. /CHANGE_PARAMETERS                       |");
-        System.out.println("|  3. /CHANGE_ACTUATORS_STATUS                 |");
+        System.out.println("|  3. /CHANGE_PARAMETERS                       |");
+        System.out.println("|  4. /CHANGE_ACTUATORS_STATUS                 |");
         System.out.println("|                                              |");
     }
 
