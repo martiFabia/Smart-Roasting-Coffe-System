@@ -71,12 +71,18 @@ public class Sensor_humidity extends Utility_sensor{
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("reg_temp");
         if(resourcesMan.getStatus().equals("off") || resourcesMan.getStatus().equals("down") )
              new CoapClientSys(resourcesMan, "up").start();
+
+        ResourcesMan res_vent = ResourcesMan.retrieveInformation("vent");
+        if(res_vent.getStatus().equals("on")){
+            new CoapClientSys(res_vent, "off").start();
+        }
     }
     public void setActionMax(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("vent");
         if(resourcesMan.getStatus().equals("off"))
              new CoapClientSys(resourcesMan, "on").start();
     }
+
     public void setActionOK(){
         ResourcesMan resourcesMan = ResourcesMan.retrieveInformation("vent");
         if(resourcesMan.getStatus().equals("on"))

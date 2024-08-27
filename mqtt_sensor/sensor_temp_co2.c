@@ -113,7 +113,7 @@ static int simulate_co2_sensing(){
 	if (co2_in_range){
 		return (rand() %(max_co2_parameter - min_co2_parameter + 1)) + min_co2_parameter;  
 	}else{
-		return (rand() % 200) + max_co2_parameter + 1;      // generate value over the max treshold		
+		return (rand() % 200) + (max_co2_parameter + 1);      // generate value over the max treshold		
 	}
 }
 
@@ -128,7 +128,7 @@ static int simulate_temp_sensing(){
 		if(flag_over_under == 1){		// generate value under the min treshold
 			return (rand() % min_temp_parameter);			
 		}else{					        // generate value over the max treshold
-			return ( rand() % 20 )  + max_temp_parameter;
+			return ( rand() % 20 )  + (max_temp_parameter + 1);
 		}
 	}
 }
@@ -139,10 +139,12 @@ static void sense_callback(void *ptr){
     }	*/
     
     co2_value = simulate_co2_sensing();
-	LOG_INFO("CO2 value detected = %d\n", co2_value);
+	//LOG_INFO("CO2 value detected = %d\n", co2_value);
+    LOG_INFO("CO2 value detected = %d%s", co2_value,(co2_value > max_co2_parameter)? "\t ->VALUE OUT RANGE\n":"\n");
     
     temp_value = simulate_temp_sensing();
-	LOG_INFO("Temperature value detected = %d\n", temp_value);
+	//LOG_INFO("Temperature value detected = %d\n", temp_value);
+    LOG_INFO("Temperature value detected = %d%s", temp_value, (temp_value < min_temp_parameter || temp_value > max_temp_parameter)? "\t ->VALUE OUT RANGE\n":"\n");
 
     //pubblico i dati solo dopo ogni minuto o se si verificano valori fuori range
 	if(num_period >= NUM_PERIOD_BEFORE_SEND){
