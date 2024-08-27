@@ -38,21 +38,34 @@ public class Sensor_humidity extends Utility_sensor{
     }
 
       // Metodo per ottenere il valore minimo per un intervallo
-    public int getMin_Hum(int interval) {
-        if (interval < 1 || interval > intervalLimits.length) {
+    public int getMin_Hum(int inter) {
+        if (inter < 1 || inter > intervalLimits.length) {
             throw new IllegalArgumentException("Intervallo non valido");
         }
-        return intervalLimits[interval - 1][0];
+        return intervalLimits[inter - 1][0];
     }
 
     // Metodo per ottenere il valore massimo per un intervallo
-    public int getMax_Hum(int interval) {
-        if (interval < 1 || interval > intervalLimits.length) {
+    public int getMax_Hum(int inter) {
+        if (inter < 1 || inter > intervalLimits.length) {
             throw new IllegalArgumentException("Intervallo non valido");
         }
-        return intervalLimits[interval - 1][1];
+        return intervalLimits[inter - 1][1];
     }
 
+    public void setMin_Hum(int inter, int value){
+        if (inter < 1 || inter > intervalLimits.length) {
+        throw new IllegalArgumentException("Intervallo non valido");
+    }
+        intervalLimits[inter - 1][0] = value;
+    }
+
+    public void setMax_Hum(int inter, int value){
+        if (inter < 1 || inter > intervalLimits.length) {
+        throw new IllegalArgumentException("Intervallo non valido");
+    }
+        intervalLimits[inter - 1][1] = value;
+    }
 
     public void setActionMin(){  
     }

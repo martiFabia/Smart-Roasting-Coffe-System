@@ -42,7 +42,6 @@ public class CoapClientSys extends Thread{
             switch (code) {
                 case CHANGED:
                  resourcesMan.updateStatus(action);
-                 System.out.println("Stato aggiornato!\n");
                     break;
                 case BAD_REQUEST:
                     System.err.println("Bad Request");

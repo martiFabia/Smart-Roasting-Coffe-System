@@ -20,7 +20,7 @@ public class Sensor_co2 extends Utility_sensor{
         return INSTANCE;
     }
 
-
+    
 
     public void setActionMin(){
     }
