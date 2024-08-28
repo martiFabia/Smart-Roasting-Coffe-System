@@ -39,7 +39,7 @@ public class ManagSys extends Thread {
     public void run() {
         while (true) {
             try {
-                sleep(2 * 1000); // Dormi per 2 secondi
+                sleep(2 * 1000);    // 2 secondi
 
                 // Connessione al database
                 try (Connection connection = DriverManager.getConnection(url, username, password)) {

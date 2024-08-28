@@ -83,7 +83,7 @@ public class UserInterface extends Thread{
                     System.out.println("|  4. /max_humidity_parameter_SECOND           |");
                     System.out.println("|  5. /min_humidity_parameter_THIRD            |");
                     System.out.println("|  6. /max_humidity_parameter_THIRD            |");
-                    System.out.println("|  7. /min_co2_parameter                       |");
+                    //System.out.println("|  7. /min_co2_parameter                       |");
                     System.out.println("|  8. /max_co2_parameter                       |");
                     System.out.println("|  9. /min_temp_parameter                      |");
                     System.out.println("|  10. /max_temp_parameter                     |");
@@ -244,10 +244,10 @@ public class UserInterface extends Thread{
                 Sensor_humidity.getInstance().setMax_Hum(3, value);
                 is_changed.put("humidity", true);
                 break;
-            case "/min_co2_parameter":
+            /*case "/min_co2_parameter":
                 Sensor_co2.getInstance().setMin(value);
                 is_changed.put("co2", true);
-                break;
+                break;*/
             case "/max_co2_parameter":
                 Sensor_co2.getInstance().setMax(value);
                 is_changed.put("co2", true);

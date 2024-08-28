@@ -150,14 +150,14 @@ static int simulate_humidity_sensing(){
 
     set_interval();
     if(alarm_state){    //se il valore è fuori range
-        if(flag_over_under == 0){   //se il valore è deve essere sopra il massimo
+        if(flag_over_under == 0){   //sopra il massimo
             if (interval == 1)
                 return (rand() % 20) + max_humidity_parameter_FIRST; 
             else if (interval == 2)
                 return (rand() % 20) + max_humidity_parameter_SECOND;
             else if (interval == 3) 
                 return (rand() % 20) + max_humidity_parameter_THIRD;
-        }else if(flag_over_under == 1){     //se il valore è deve essere sotto il minimo
+        }else if(flag_over_under == 1){     //sotto il minimo
             if (interval == 1)
                 return rand() % min_humidity_parameter_FIRST; 
             else if (interval == 2) 

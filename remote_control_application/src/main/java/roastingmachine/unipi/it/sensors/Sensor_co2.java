@@ -2,7 +2,6 @@ package roastingmachine.unipi.it.sensors;
 
 import roastingmachine.unipi.it.resources.ResourcesMan;
 import roastingmachine.unipi.it.proc.CoapClientSys;
-// IMPORTARE THREAD PER COMUNICAZIONE COAP
 
 public class Sensor_co2 extends Utility_sensor{
     private static Sensor_co2 INSTANCE;
@@ -27,7 +26,7 @@ public class Sensor_co2 extends Utility_sensor{
 
     public void setActionMax() {
         // Gestione dell'allerta CO2
-        if (Sensor_co2.getInstance().getValue() > Sensor_co2.getInstance().getMax() + 100) { // Se il valore supera il massimo di 200
+        if (Sensor_co2.getInstance().getValue() > Sensor_co2.getInstance().getMax() + 100) { // Se il valore supera il massimo di 100
             ResourcesMan alertResourcesMan = ResourcesMan.retrieveInformation("alert");
             if (alertResourcesMan.getStatus().equals("off")) {
                 new CoapClientSys(alertResourcesMan, "on").start();
