@@ -54,7 +54,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     if(len > 0)
     {
         action = findJsonField_String((char*)chunk, "action"); //mi salvo in action l'azione scritta nel payload
-        LOG_INFO("received command: action=%s\n", action); //per debug
+        LOG_INFO("Alert received command: action=%s\n", action); //per debug
     }
 
     //gestione dell'azione

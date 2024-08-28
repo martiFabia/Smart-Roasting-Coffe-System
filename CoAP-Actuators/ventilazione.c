@@ -1,7 +1,6 @@
 /*
 In questo file viene implementato il processo dell'attuatore "ventilazione" e la registrazione al server
 
-LAB 03 VALLATI
 */
 
 
@@ -38,7 +37,7 @@ void client_chunk_handler(coap_message_t *response){
     }else if(response->code != CREATED_2_01){
         LOG_ERR("Errore. Codice ricevuto: %d\n", response->code);
     }else{ //se sono qui è andato tutto bene
-        LOG_INFO("Registrazione riuscita!\n");
+        LOG_INFO("Registrazione vent riuscita!\n");
         max_registration_retry = 0;
         return;
     }

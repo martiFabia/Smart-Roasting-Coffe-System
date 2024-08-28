@@ -30,7 +30,7 @@ static char *service_registration_url = "/registration"; //!!!!!!!!!!
 static int max_registration_retry = MAX_REGISTRATION_RETRY;
 
 //define a handler to handle the response from the server
-//gestione quindi della risposta del server al tentativo di registrazione
+//gestione della risposta del server al tentativo di registrazione
 void client_chunk_handler(coap_message_t *response){
 
     if(response == NULL){
@@ -38,7 +38,7 @@ void client_chunk_handler(coap_message_t *response){
     }else if(response->code != CREATED_2_01){
         LOG_ERR("Errore. Codice ricevuto:%d\n", response->code);
     }else{ //se sono qui è andato tutto bene
-        LOG_INFO("Registrazione riuscita!\n");
+        LOG_INFO("Registrazione reg_temp riuscita!\n");
         max_registration_retry = 0;
         return;
     }

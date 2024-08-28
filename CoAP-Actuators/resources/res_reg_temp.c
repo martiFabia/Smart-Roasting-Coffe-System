@@ -39,12 +39,12 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     if(len > 0)
     {
         action = findJsonField_String((char*)chunk, "action"); //mi salvo in action l'azione scritta nel payload
-        LOG_INFO("received command: action=%s\n", action); //per debug
+        LOG_INFO("Reg_temp received command: action=%s\n", action); //per debug
     }
 
     //gestione dell'azione
     if(action!=NULL && strlen(action)!=0){
-        if((strncmp(action, "up", len) == 0)){  //qunado up luce verde
+        if((strncmp(action, "up", len) == 0)){  //quando up luce verde
             if(reg_temp_status == 0){ //era spenta
                 //leds_off(LEDS_RED);
                 leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
