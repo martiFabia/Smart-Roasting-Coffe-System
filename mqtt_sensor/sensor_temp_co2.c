@@ -102,7 +102,7 @@ static int min_temp_parameter = 180;
 static int max_temp_parameter = 220;
 
 #define SENSE_PERIOD   2		    // seconds
-#define NUM_PERIOD_BEFORE_SEND  30 		// every 1 minute there's one pub
+#define NUM_PERIOD_BEFORE_SEND  15 		// every 30 seconds there's one pub
 
 static int num_period = 0;
 static int is_first_pub_flag = 1;

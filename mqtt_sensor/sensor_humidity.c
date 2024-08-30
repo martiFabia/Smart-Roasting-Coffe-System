@@ -98,9 +98,9 @@ static int button_pressed = 0;
 
 // Time tracking
 static uint16_t time_elapsed = 0;
-#define FIRST_INTERVAL  10          // 10 seconds
-#define SECOND_INTERVAL 20          // 20 seconds
-#define THIRD_INTERVAL  30          // 30 seconds
+#define FIRST_INTERVAL  20          // 20 seconds
+#define SECOND_INTERVAL 40          // 40 seconds
+#define THIRD_INTERVAL  60          // 60 seconds
 
 static int num_period = 0;
 static int is_first_pub_flag = 1;
@@ -179,9 +179,9 @@ static void sense_callback(void *ptr){
 
 
     if(alarm_state)
-        time_elapsed = (time_elapsed + SENSE_PERIOD_ON_ALERT) % 31;     //modulo 31 cosi da non superare il tempo massimo e ricominciare da 0
+        time_elapsed = (time_elapsed + SENSE_PERIOD_ON_ALERT) % 61;     //modulo 61 cosi da non superare il tempo massimo e ricominciare da 0
     else
-        time_elapsed = (time_elapsed + SENSE_PERIOD) % 31;
+        time_elapsed = (time_elapsed + SENSE_PERIOD) % 61;
 
 
     if(num_period >= NUM_PERIOD_BEFORE_SEND){
