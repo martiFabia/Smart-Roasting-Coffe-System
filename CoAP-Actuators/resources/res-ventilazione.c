@@ -52,11 +52,13 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     //gestione dell'azione
     if (action != NULL && strlen(action) != 0) {
         if ((strncmp(action, "on", len) == 0) && vent_status == 0) {
-            leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN)); //luce accesa = luce verde 
-            vent_status = 1; //luce accesa
+            leds_on(LEDS_GREEN); //vent accesa = luce verde
+            leds_off(LEDS_RED); 
+            vent_status = 1; 
             coap_set_status_code(response, CHANGED_2_04);
         } else if ((strncmp(action, "off", len) == 0) && vent_status == 1) {
-            leds_set(LEDS_NUM_TO_MASK(LEDS_RED)); //luce spenta = luce rossa
+            leds_on(LEDS_RED); //vent spenta = luce rossa
+            leds_off(LEDS_GREEN); 
             vent_status = 0; //spengo
             coap_set_status_code(response, CHANGED_2_04);
         } else {

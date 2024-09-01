@@ -44,7 +44,7 @@ public class UserInterface extends Thread{
                 case "/show_actuators_status":
                     System.out.println("|                                              |");
                     System.out.println("|  Type the actuator's name to see its status  |");
-                    System.out.println("|  1. /vent                                    |");
+                    System.out.println("|  1. /fan                                     |");
                     System.out.println("|  2. /reg_temp                                |");
                     System.out.println("|  3. /alert                                   |");
                     System.out.println("|  4. /all                                     |");
@@ -83,7 +83,6 @@ public class UserInterface extends Thread{
                     System.out.println("|  4. /max_humidity_parameter_SECOND           |");
                     System.out.println("|  5. /min_humidity_parameter_THIRD            |");
                     System.out.println("|  6. /max_humidity_parameter_THIRD            |");
-                    //System.out.println("|  7. /min_co2_parameter                       |");
                     System.out.println("|  8. /max_co2_parameter                       |");
                     System.out.println("|  9. /min_temp_parameter                      |");
                     System.out.println("|  10. /max_temp_parameter                     |");
@@ -122,8 +121,8 @@ public class UserInterface extends Thread{
                     System.out.println("|  3. /reg_temp_down                           |");
                     System.out.println("|  4. /alert_on                                |");
                     System.out.println("|  5. /alert_off                               |");
-                    System.out.println("|  6. /vent_on                                 |");
-                    System.out.println("|  7. /vent_off                                |");
+                    System.out.println("|  6. /fan_on                                  |");
+                    System.out.println("|  7. /fan_off                                 |");
                     System.out.println("|                                              |");
                     try {
                         comando = reader.readLine();
@@ -166,11 +165,11 @@ public class UserInterface extends Thread{
             value = "off";
             resourceType = "alert";
             break;
-        case "/vent_on":
+        case "/fan_on":
             value = "on";
             resourceType = "vent";
             break;
-        case "/vent_off":
+        case "/fan_off":
             value = "off";
             resourceType = "vent";
             break;
@@ -309,7 +308,7 @@ public class UserInterface extends Thread{
 
         comando = comando.toLowerCase();
         
-        if(!comando.equals("/vent") && !comando.equals("/reg_temp") && !comando.equals("/alert") && !comando.equals("/all")){
+        if(!comando.equals("/fan") && !comando.equals("/reg_temp") && !comando.equals("/alert") && !comando.equals("/all")){
             print_help();
             return;
         }
@@ -332,7 +331,7 @@ public class UserInterface extends Thread{
     }
 
     private void print_intro(){
-        System.out.println("**************** CONTROL CENTER ****************");
+        System.out.println("**************** ROASTING MACHINE CONTROL CENTER ****************");
         System.out.println("|                                              |");
     }
 

@@ -80,7 +80,7 @@ public class ManagSys extends Thread {
                             int value = values.get(type);
                                 if(value < sens.get(type).getMin()){
                                     sens.get(type).setActionMin();
-                                } else if (value >= sens.get(type).getMax()) {
+                                } else if (value > sens.get(type).getMax()) {
                                     sens.get(type).setActionMax();
                                 } else {
                                     sens.get(type).setActionOK();

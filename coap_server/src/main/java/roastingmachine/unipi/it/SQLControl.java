@@ -50,7 +50,12 @@ public class SQLControl extends CoapResource {
                     System.out.println("nessuna riga inserita\n");
                 }else{
                     response = new Response(CoAP.ResponseCode.CREATED);
-                    System.err.println("Risorsa inserita!\n");
+                    if ("actuator_vent".equals((String) json.get("name"))) {
+                        String resourceName = "actuator_fan"; // Sostituisco il nome
+                        System.err.println("Risorsa " + resourceName + " inserita! \n");
+                    }else {
+                        System.err.println("Risorsa " + json.get("name") + " inserita! \n");
+                    }
                 }
             } catch (SQLException e) {
                 response = new Response(CoAP.ResponseCode.INTERNAL_SERVER_ERROR);

@@ -139,11 +139,9 @@ static void sense_callback(void *ptr){
     }	*/
     
     co2_value = simulate_co2_sensing();
-	//LOG_INFO("CO2 value detected = %d\n", co2_value);
     LOG_INFO("CO2 value detected = %d%s", co2_value,(co2_value > max_co2_parameter)? "\t ->VALUE OUT RANGE\n":"\n");
     
     temp_value = simulate_temp_sensing();
-	//LOG_INFO("Temperature value detected = %d\n", temp_value);
     LOG_INFO("Temperature value detected = %d%s", temp_value, (temp_value < min_temp_parameter || temp_value > max_temp_parameter)? "\t ->VALUE OUT RANGE\n":"\n");
 
     //pubblico i dati solo dopo ogni minuto o se si verificano valori fuori range
@@ -185,13 +183,13 @@ static void pub_handler_temp(const char *topic, uint16_t topic_len, const uint8_
 static void mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data){
     switch(event) {
     case MQTT_EVENT_CONNECTED: {
-        LOG_INFO("Application has a MQTT connection\n");
+        printf("Application has a MQTT connection\n");
 
         state = STATE_CONNECTED;
         break;
     }
     case MQTT_EVENT_DISCONNECTED: {
-        LOG_INFO("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
+        printf("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
 
         state = STATE_DISCONNECTED;
         process_poll(&sensor_temp_co2);
@@ -212,7 +210,7 @@ static void mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data
             mqtt_suback_event_t *suback_event = (mqtt_suback_event_t *)data;
 
             if(suback_event->success) {
-                LOG_INFO("Application is subscribed to topic successfully\n");
+                printf("Application is subscribed to topic successfully\n");
                 sub_num++;
             } else {
                 LOG_ERR("Application failed to subscribe to topic (ret code %x)\n", suback_event->return_code);
@@ -224,15 +222,15 @@ static void mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data
             break;
     }
     case MQTT_EVENT_UNSUBACK: {
-        LOG_INFO("Application is unsubscribed to topic successfully\n");
+        printf("Application is unsubscribed to topic successfully\n");
         break;
     }
     case MQTT_EVENT_PUBACK: {
-        LOG_INFO("Publishing complete.\n");
+        printf("Publishing complete.\n");
         break;
     }
     default:
-        LOG_INFO("Application got a unhandled MQTT event: %i\n", event);
+        printf("Application got a unhandled MQTT event: %i\n", event);
         break;
     }
 }
@@ -249,7 +247,7 @@ PROCESS_THREAD(sensor_temp_co2, ev, data){
 
     PROCESS_BEGIN();
    
-    LOG_INFO("MQTT sensor_temp_co2 started\n");
+    printf("MQTT sensor_temp_co2 started\n");
 
     // Initialize the ClientID as MAC address
     snprintf(client_id, BUFFER_SIZE, "%02x%02x%02x%02x%02x%02x",
@@ -279,7 +277,7 @@ PROCESS_THREAD(sensor_temp_co2, ev, data){
             
             if(state == STATE_NET_OK){
                 // Connect to MQTT broker
-                LOG_INFO("Connecting to MQTT broker!\n");
+                printf("Connecting to MQTT broker!\n");
                 
                 memcpy(broker_address, broker_ip, strlen(broker_ip));
                 
@@ -294,7 +292,7 @@ PROCESS_THREAD(sensor_temp_co2, ev, data){
                 //topic: co2
                 strcpy(sub_topic,"param/co2");
                 status = mqtt_subscribe(&conn, NULL, sub_topic, MQTT_QOS_LEVEL_0);
-                LOG_INFO("Subscribing to param/co2 topic!\n");
+                printf("Subscribing to param/co2 topic!\n");
                 if(status == MQTT_STATUS_OUT_QUEUE_FULL) {
                     LOG_ERR("Tried to subscribe to param/co2 but command queue was full!\n");
                     PROCESS_EXIT();
@@ -311,7 +309,7 @@ PROCESS_THREAD(sensor_temp_co2, ev, data){
                 // topic: temp
                 strcpy(sub_topic,"param/temp");
                 status = mqtt_subscribe(&conn, NULL, sub_topic, MQTT_QOS_LEVEL_0);
-                LOG_INFO("Subscribing to param/temp topic!\n");
+                printf("Subscribing to param/temp topic!\n");
                 if(status == MQTT_STATUS_OUT_QUEUE_FULL) {
                     LOG_ERR("Tried to subscribe to param/temp topic but command queue was full!\n");
                     PROCESS_EXIT();

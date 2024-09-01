@@ -26,7 +26,7 @@ LAB 03 VALLATI
 
 static coap_endpoint_t server_ep;
 static coap_message_t request[1];       //cosi possiamo trattare il pacchetto come un puntatore
-static char *service_registration_url = "/registration"; //!!!!!!!!!!
+static char *service_registration_url = "/registration"; 
 static int max_registration_retry = MAX_REGISTRATION_RETRY;
 
 //define a handler to handle the response from the server
@@ -59,8 +59,8 @@ AUTOSTART_PROCESSES(&reg_temp_thread);
 PROCESS_THREAD(reg_temp_thread, ev, data){
 	
 	PROCESS_BEGIN();
-   // leds_on(LEDS_RED); per dongle
-   leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
+   leds_on(LEDS_RED); // per dongle
+   // leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 
     while(max_registration_retry != 0){
 
@@ -73,9 +73,9 @@ PROCESS_THREAD(reg_temp_thread, ev, data){
 	
 		COAP_BLOCKING_REQUEST(&server_ep, request, client_chunk_handler);
 
-        // se qualcosa è andato storto, sleep di 15 secondi prima di ritentare
+        // se qualcosa è andato storto, sleep di 5 secondi prima di ritentare
         if(max_registration_retry == -1){
-            etimer_set(&sleep_timer, 15*CLOCK_SECOND);
+            etimer_set(&sleep_timer, 5*CLOCK_SECOND);
             PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&sleep_timer));
 			max_registration_retry = MAX_REGISTRATION_RETRY;
         }

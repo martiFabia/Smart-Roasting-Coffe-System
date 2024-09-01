@@ -45,40 +45,40 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     //gestione dell'azione
     if(action!=NULL && strlen(action)!=0){
         if((strncmp(action, "up", len) == 0)){  //quando up luce verde
-            if(reg_temp_status == 0){ //era spenta
-                //leds_off(LEDS_RED);
-                leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+            if(reg_temp_status != 2){
+                leds_off(LEDS_BLUE);
+                leds_off(LEDS_RED);
+                leds_on(LEDS_GREEN);
                 reg_temp_status = 2;
-            }else if(reg_temp_status == 1){ //era impostata a down
-                //leds_off(LEDS_RED); //PER DOWN LUCE GIALLA = RED + GREEN, spengo solo red per avere green
-                leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
-                reg_temp_status++;
             }else{
                 LOG_ERR("already up");
             }
 
 		    coap_set_status_code(response, CHANGED_2_04);
 	    }
-        else if((strncmp(action, "down", len) == 0)){
-            if(reg_temp_status == 2){ //era up
-                //leds_on(LEDS_RED);
-                leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
-                reg_temp_status--;
-            }else if(reg_temp_status == 0){ //era spenta
-                //leds_on(LEDS_GREEN);	
-                leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
-                reg_temp_status++;
+        else if((strncmp(action, "down", len) == 0)){     //quando down luce blu
+            if(reg_temp_status != 1){ 
+                leds_off(LEDS_GREEN);
+                leds_off(LEDS_RED);
+                leds_on(LEDS_BLUE);
+                reg_temp_status = 1;
             }else{
                 LOG_INFO("Already down");
             }
 
 		    coap_set_status_code(response, CHANGED_2_04);
 	    }
-        else if((strncmp(action, "off", len) == 0)){
-            reg_temp_status = 0;
-            //leds_off(LEDS_GREEN);
-            leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
-            coap_set_status_code(response, CHANGED_2_04);
+        else if((strncmp(action, "off", len) == 0)){    //off luce rossa
+            if(reg_temp_status != 0){ 
+                leds_off(LEDS_GREEN);
+                leds_off(LEDS_BLUE);
+                leds_on(LEDS_RED);
+                reg_temp_status = 0;
+            }else{
+                LOG_INFO("Already off");
+            }
+
+		    coap_set_status_code(response, CHANGED_2_04);
 	    }
         else
             coap_set_status_code(response, BAD_OPTION_4_02);
