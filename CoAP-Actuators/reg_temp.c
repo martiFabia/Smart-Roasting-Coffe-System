@@ -1,7 +1,5 @@
 /*
 In questo file viene implementato il processo dell'attuatore "regolatore di temperatura" e la registrazione al server
-
-LAB 03 VALLATI
 */
 
 
@@ -73,9 +71,9 @@ PROCESS_THREAD(reg_temp_thread, ev, data){
 	
 		COAP_BLOCKING_REQUEST(&server_ep, request, client_chunk_handler);
 
-        // se qualcosa è andato storto, sleep di 5 secondi prima di ritentare
+        // se qualcosa è andato storto, sleep di 10 secondi prima di ritentare
         if(max_registration_retry == -1){
-            etimer_set(&sleep_timer, 5*CLOCK_SECOND);
+            etimer_set(&sleep_timer, 10*CLOCK_SECOND);
             PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&sleep_timer));
 			max_registration_retry = MAX_REGISTRATION_RETRY;
         }
