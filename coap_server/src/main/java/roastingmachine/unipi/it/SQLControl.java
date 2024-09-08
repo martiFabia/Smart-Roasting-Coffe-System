@@ -51,7 +51,7 @@ public class SQLControl extends CoapResource {
                 }else{
                     response = new Response(CoAP.ResponseCode.CREATED);
                     if ("actuator_vent".equals((String) json.get("name"))) {
-                        String resourceName = "actuator_fan"; // Sostituisco il nome
+                        String resourceName = "actuator_fan"; // Sostituisco il nome, solo per stampare il nome corretto
                         System.err.println("Risorsa " + resourceName + " inserita! \n");
                     }else {
                         System.err.println("Risorsa " + json.get("name") + " inserita! \n");

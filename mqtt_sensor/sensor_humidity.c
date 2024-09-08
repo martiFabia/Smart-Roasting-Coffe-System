@@ -105,6 +105,7 @@ static uint16_t time_elapsed = 0;
 static int num_period = 0;
 static int is_first_pub_flag = 1;
 static int interval = 1;
+static bool first_value = true; 
 button_hal_button_t *btn;
 /*---------------------------------------------------------------------------*/
 
@@ -179,9 +180,9 @@ static void sense_callback(void *ptr){
 
 
     if(alarm_state)
-        time_elapsed = (time_elapsed + SENSE_PERIOD_ON_ALERT) % 61;     //modulo 61 cosi da non superare il tempo massimo e ricominciare da 0
+        time_elapsed = (time_elapsed + SENSE_PERIOD_ON_ALERT) % 60;     //modulo 60 cosi da non superare il tempo massimo e ricominciare da 0
     else
-        time_elapsed = (time_elapsed + SENSE_PERIOD) % 61;
+        time_elapsed = (time_elapsed + SENSE_PERIOD) % 60;
 
 
     if(num_period >= NUM_PERIOD_BEFORE_SEND){
@@ -190,7 +191,7 @@ static void sense_callback(void *ptr){
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
         num_period = 0;
     }
-    else if(alarm_state){
+    else if(alarm_state || first_value){
         sprintf(pub_topic, "%s", "sensor/humidity");	
         sprintf(app_buffer, "{ \"humidity_value\": %d, \"interval\": %d }", value, interval);
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
@@ -199,7 +200,7 @@ static void sense_callback(void *ptr){
         num_period++;
     }
 
-    
+    first_value = false; 
     if(alarm_state)
         ctimer_set(&sensing_timer, SENSE_PERIOD_ON_ALERT * CLOCK_SECOND, sense_callback, NULL);
     else
@@ -376,6 +377,7 @@ PROCESS_THREAD(sensor_humidity, ev, data){
                 alarm_state = false;
                 flag_over_under = -1;
                 button_pressed = 0; 
+                first_value = true; 
             }
         }
     }

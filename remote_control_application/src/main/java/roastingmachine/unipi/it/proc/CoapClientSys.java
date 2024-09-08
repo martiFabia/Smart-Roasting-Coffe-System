@@ -41,7 +41,7 @@ public class CoapClientSys extends Thread{
             CoAP.ResponseCode code = response.getCode();
             switch (code) {
                 case CHANGED:
-                 resourcesMan.updateStatus(action);
+                    resourcesMan.updateStatus(action);
                     break;
                 case BAD_REQUEST:
                     System.err.println("Bad Request");

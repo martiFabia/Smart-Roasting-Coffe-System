@@ -106,6 +106,7 @@ static int max_temp_parameter = 220;
 
 static int num_period = 0;
 static int is_first_pub_flag = 1;
+static bool first_value = true; 
 
 /*---------------------------------------------------------------------------*/
 
@@ -134,9 +135,6 @@ static int simulate_temp_sensing(){
 }
 
 static void sense_callback(void *ptr){
-    /*if (state != STATE_SUBSCRIBED2){
-        return;
-    }	*/
     
     co2_value = simulate_co2_sensing();
     LOG_INFO("CO2 value detected = %d%s", co2_value,(co2_value > max_co2_parameter)? "\t ->VALUE OUT RANGE\n":"\n");
@@ -151,7 +149,7 @@ static void sense_callback(void *ptr){
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 		num_period = 0;
 
-	}else if(co2_value > max_co2_parameter || temp_value < min_temp_parameter || temp_value > max_temp_parameter){
+	}else if(co2_value > max_co2_parameter || temp_value < min_temp_parameter || temp_value > max_temp_parameter || first_value){
         sprintf(pub_topic, "%s", "sensor/temp_co2");	
         sprintf(app_buffer, "{ \"co2_value\": %d, \"temp_value\": %d }", co2_value, temp_value);
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
@@ -160,6 +158,7 @@ static void sense_callback(void *ptr){
         num_period++;
     }
 
+    first_value = false; 
 	ctimer_set(&sensing_timer, SENSE_PERIOD * CLOCK_SECOND, sense_callback, NULL);
 
 }
@@ -347,6 +346,7 @@ PROCESS_THREAD(sensor_temp_co2, ev, data){
 			}else if(button_pressed == 3){
 				button_pressed = 0;
 				temp_in_range = co2_in_range = 1; // normal value
+                first_value = true; 
 			}
             flag_over_under = -1;		
         }

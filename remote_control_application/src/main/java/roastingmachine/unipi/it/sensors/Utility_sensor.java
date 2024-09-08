@@ -4,7 +4,7 @@ package roastingmachine.unipi.it.sensors;
 classe utilizzata per implementare le varie funzioni di utilità utilizzate dalle altre classi
 */ 
 
-public abstract class Utility_sensor{ //classe che per essere utilizzata deve essere estesa da altre classi
+public abstract class Utility_sensor{ 
 
     protected int min;
     protected int max;

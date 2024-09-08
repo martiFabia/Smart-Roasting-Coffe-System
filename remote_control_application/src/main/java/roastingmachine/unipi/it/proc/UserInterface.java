@@ -140,52 +140,52 @@ public class UserInterface extends Thread{
     }
 
     private void action_actuators(String comando) {
-    String value;
-    ResourcesMan res;
-    String resourceType = null;
+        String value;
+        ResourcesMan res;
+        String resourceType = null;
 
-    switch (comando) {
-        case "/reg_temp_up":
-            value = "up";
-            resourceType = "reg_temp";
-            break;
-        case "/reg_temp_off":
-            value = "off";
-            resourceType = "reg_temp";
-            break;
-        case "/reg_temp_down":
-            value = "down";
-            resourceType = "reg_temp";
-            break;
-        case "/alert_on":
-            value = "on";
-            resourceType = "alert";
-            break;
-        case "/alert_off":
-            value = "off";
-            resourceType = "alert";
-            break;
-        case "/fan_on":
-            value = "on";
-            resourceType = "vent";
-            break;
-        case "/fan_off":
-            value = "off";
-            resourceType = "vent";
-            break;
-        default:
-            print_help();
+        switch (comando) {
+            case "/reg_temp_up":
+                value = "up";
+                resourceType = "reg_temp";
+                break;
+            case "/reg_temp_off":
+                value = "off";
+                resourceType = "reg_temp";
+                break;
+            case "/reg_temp_down":
+                value = "down";
+                resourceType = "reg_temp";
+                break;
+            case "/alert_on":
+                value = "on";
+                resourceType = "alert";
+                break;
+            case "/alert_off":
+                value = "off";
+                resourceType = "alert";
+                break;
+            case "/fan_on":
+                value = "on";
+                resourceType = "vent";
+                break;
+            case "/fan_off":
+                value = "off";
+                resourceType = "vent";
+                break;
+            default:
+                print_help();
+                return;
+        }
+
+        res = ResourcesMan.retrieveInformation(resourceType);
+        if (res.getStatus().equals(value)) {
+            System.out.println(resourceType + " already " + value);
             return;
-    }
+        }
 
-    res = ResourcesMan.retrieveInformation(resourceType);
-    if (res.getStatus().equals(value)) {
-        System.out.println(resourceType + " already " + value);
-        return;
+        new CoapClientSys(res, value).start();
     }
-
-    new CoapClientSys(res, value).start();
-}
 
 
     private void send_mqtt(MqttClient client, String topic) throws MqttException{
@@ -243,10 +243,6 @@ public class UserInterface extends Thread{
                 Sensor_humidity.getInstance().setMax_Hum(3, value);
                 is_changed.put("humidity", true);
                 break;
-            /*case "/min_co2_parameter":
-                Sensor_co2.getInstance().setMin(value);
-                is_changed.put("co2", true);
-                break;*/
             case "/max_co2_parameter":
                 Sensor_co2.getInstance().setMax(value);
                 is_changed.put("co2", true);
@@ -256,7 +252,7 @@ public class UserInterface extends Thread{
                 is_changed.put("temp", true);
                 break;
             case "/max_temp_parameter":
-                Sensor_co2.getInstance().setMax(value);
+                Sensor_temp.getInstance().setMax(value);
                 is_changed.put("temp", true);
                 break;
             default:
@@ -324,14 +320,16 @@ public class UserInterface extends Thread{
         }else{
 
             String resource = comando.substring(1); //per togliere /
-
+            if(resource.equals("fan")){
+                resource = "vent";
+            }
             ResourcesMan res = ResourcesMan.retrieveInformation(resource);
             System.out.println(res);
         }
     }
 
     private void print_intro(){
-        System.out.println("**************** ROASTING MACHINE CONTROL CENTER ****************");
+        System.out.println("******* ROASTING MACHINE CONTROL CENTER *******");
         System.out.println("|                                              |");
     }
 
@@ -345,6 +343,7 @@ public class UserInterface extends Thread{
         System.out.println("|  3. /CHANGE_PARAMETERS                       |");
         System.out.println("|  4. /CHANGE_ACTUATORS_STATUS                 |");
         System.out.println("|                                              |");
+        System.out.println("|**********************************************|");
     }
 
     private void print_help(){
