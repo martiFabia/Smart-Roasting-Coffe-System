@@ -53,5 +53,8 @@
     <li><strong>Data Analysis</strong>: View and analyze historical data stored in the MySQL database.</li>
 </ol>
 
+<h2> Documentation </h2>
+For a deeper dive into the project, check out the documentation available above ☝🏻.
+
 </body>
 </html>
