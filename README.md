@@ -52,9 +52,10 @@
     <li><strong>Adjust parameters</strong>: Modify the temperature, humidity, or CO2 levels based on roasting profiles.</li>
     <li><strong>Data Analysis</strong>: View and analyze historical data stored in the MySQL database.</li>
 </ol>
-
-<h2> Documentation </h2>
-For a deeper dive into the project, check out the [**documentation**](./Documentation.pdf)..
-
 </body>
 </html>
+
+## Documentation 
+For a deeper dive into the project, check out the [**Documentation**](./Documentation.pdf).
+
+
