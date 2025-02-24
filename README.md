@@ -54,7 +54,7 @@
 </ol>
 
 <h2> Documentation </h2>
-For a deeper dive into the project, check out the [**documentation**](./Documentation.pdf).
+For a deeper dive into the project, check out the [**documentation**](./Documentation.pdf)..
 
 </body>
 </html>
